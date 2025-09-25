@@ -2,6 +2,7 @@ package com.example.company.services;
 
 import com.example.company.commons.PageResponse;
 import com.example.company.exceptions.CustomException;
+import com.example.company.exceptions.NotFoundException;
 import com.example.company.models.dto.requests.CompanyRequest;
 import com.example.company.models.dto.responses.CompanyResponse;
 import com.example.company.models.entity.Company;
@@ -35,7 +36,7 @@ public class CompanyServiceImpl implements CompanyService{
 
     @Override
     public List<CompanyResponse> getAll() {
-        return companyRepository.getAll().stream()
+        return companyRepository.getAllActive().stream()
                 .map(companyMapper::convertToResponse)
                 .toList();
     }
@@ -54,14 +55,14 @@ public class CompanyServiceImpl implements CompanyService{
     @Override
     public Page<CompanyResponse> getAllPageable(int pageNo, int pageSize) {
         Pageable pageable = PageRequest.of(pageNo, pageSize);
-        Page<Company> page = companyRepository.findAll(pageable);
+        Page<Company> page = companyRepository.getAllActivePage(pageable);
         return page.map(companyMapper::convertToResponse);
     }
 
     @Override
     public PageResponse<CompanyResponse> getAllPageableCustom(int pageNo, int pageSize) {
         Pageable pageable = PageRequest.of(pageNo, pageSize);
-        Page<Company> page = companyRepository.findAll(pageable);
+        Page<Company> page = companyRepository.getAllActivePage(pageable);
         PageResponse<CompanyResponse> pageResponse = new PageResponse<>();
         pageResponse.setContent(page.getContent().stream().map(companyMapper::convertToResponse).toList());
         pageResponse.setPageNo(pageNo);
@@ -70,6 +71,28 @@ public class CompanyServiceImpl implements CompanyService{
         pageResponse.setTotalElements(page.getNumberOfElements());
         pageResponse.setLast(page.isLast());
         return pageResponse;
+    }
+
+    @Override
+    public String toggleSoftDelete(int companyId, boolean isSoftDelete) {
+        Company company = companyRepository.findById(companyId)
+                .orElseThrow(() -> new NotFoundException("Company not found"));
+        company.setDeleted(isSoftDelete);
+        companyRepository.save(company);
+
+        return isSoftDelete ?
+                "Soft deleted company with id = " + companyId + " successfully!"
+                :
+                "Restore company with id = " + companyId + " successfully!";
+    }
+
+    @Override
+    public CompanyResponse forceDelete(int companyId) {
+        Company company = companyRepository.findById(companyId)
+                .orElseThrow(() -> new NotFoundException("Company not found"));
+        CompanyResponse response = companyMapper.convertToResponse(company);
+        companyRepository.delete(company);
+        return response;
     }
 
 }

@@ -54,4 +54,27 @@ public class CompanyController {
         );
     }
 
+    @PatchMapping("/soft-delete/{id}")
+    public ResponseEntity<BaseResponseObj> softDelete(@PathVariable("id") int id) {
+        boolean isNewSoftDelete = true;
+        return ResponseEntity.ok(
+                new BaseResponseObj(200, null, companyService.toggleSoftDelete(id, isNewSoftDelete))
+        );
+    }
+
+    @PatchMapping("/restore/{id}")
+    public ResponseEntity<BaseResponseObj> restore(@PathVariable("id") int id) {
+        boolean isNewSoftDelete = false;
+        return ResponseEntity.ok(
+                new BaseResponseObj(200, null, companyService.toggleSoftDelete(id, isNewSoftDelete))
+        );
+    }
+
+    @DeleteMapping("/force-delete/{id}")
+    public ResponseEntity<BaseResponseObj> forceDelete(@PathVariable("id") int id) {
+        return ResponseEntity.ok(
+                new BaseResponseObj(200, companyService.forceDelete(id), "Force deleted successfully")
+        );
+    }
+
 }

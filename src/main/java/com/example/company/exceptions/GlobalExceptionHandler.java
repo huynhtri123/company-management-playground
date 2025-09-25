@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
     @ExceptionHandler(DataIntegrityViolationException.class)
     public BaseResponseObj handleDataIntegrityViolationException(DataIntegrityViolationException e) {
         return new BaseResponseObj(400, null , e.getMessage());
@@ -17,4 +18,10 @@ public class GlobalExceptionHandler {
     public BaseResponseObj handleCustomException(CustomException e) {
         return new BaseResponseObj(e.getCode(), null , e.getMessage());
     }
+
+    @ExceptionHandler(NotFoundException.class)
+    public BaseResponseObj handleNotFoundException(NotFoundException e) {
+        return new BaseResponseObj(400, null , e.getMessage());
+    }
+
 }

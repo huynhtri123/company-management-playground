@@ -22,6 +22,9 @@ public abstract class BaseEntity {  // abstract: tránh việc JPA cố gắng t
     @UpdateTimestamp
     private Instant updatedAt;
 
+    @Column(name = "is_active", nullable = false)
     private boolean isActive = true;
+
+    @Column(name = "is_deleted", nullable = false)
     private boolean isDeleted = false;
 }

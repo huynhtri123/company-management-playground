@@ -13,4 +13,6 @@ public interface CompanyService {
     public CompanyResponse update(int id, CompanyRequest companyRequest);
     public Page<CompanyResponse> getAllPageable(int pageNo, int pageSize);
     public PageResponse<CompanyResponse> getAllPageableCustom(int pageNo, int pageSize);
+    public String toggleSoftDelete(int companyId, boolean isSoftDelete);
+    public CompanyResponse forceDelete(int companyId);
 }
