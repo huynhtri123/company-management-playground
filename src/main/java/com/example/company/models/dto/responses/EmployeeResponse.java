@@ -1,0 +1,16 @@
+package com.example.company.models.dto.responses;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
+@Data
+@EqualsAndHashCode(callSuper = false)
+@NoArgsConstructor
+@AllArgsConstructor
+public class EmployeeResponse extends BaseResponse {
+    private String name;
+    private DepartmentResponse department;
+    private Double salary;
+}
