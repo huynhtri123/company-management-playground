@@ -11,4 +11,6 @@ public interface CompanyService {
     public CompanyResponse create(CompanyRequest companyRequest);
     public List<CompanyResponse> getAll();
     public CompanyResponse update(int id, CompanyRequest companyRequest);
+    public Page<CompanyResponse> getAllPageable(int pageNo, int pageSize);
+    public PageResponse<CompanyResponse> getAllPageableCustom(int pageNo, int pageSize);
 }

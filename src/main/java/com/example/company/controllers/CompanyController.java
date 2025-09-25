@@ -35,4 +35,23 @@ public class CompanyController {
                 new BaseResponseObj(200, companyService.update(id, companyRequest), "Updated company successfully")
         );
     }
+
+    @GetMapping("/pageable")
+    public ResponseEntity<BaseResponseObj> getAllPageable(@RequestParam("pageNo") int pageNo,
+                                                          @RequestParam("pageSize") int pageSize) {
+        return ResponseEntity.ok(
+                new BaseResponseObj(200, companyService.getAllPageable(pageNo, pageSize), "All page successfully")
+        );
+    }
+
+    @GetMapping("/pageable-custom")
+    public ResponseEntity<BaseResponseObj> getAllPageableCustom(@RequestParam("pageNo") int pageNo,
+                                                           @RequestParam("pageSize") int pageSize) {
+        return ResponseEntity.ok(
+                new BaseResponseObj(200,
+                        companyService.getAllPageableCustom(pageNo, pageSize),
+                        "All page successfully")
+        );
+    }
+
 }

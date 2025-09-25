@@ -50,4 +50,26 @@ public class CompanyServiceImpl implements CompanyService{
         company.setName(companyRequest.getName());
         return companyMapper.convertToResponse(companyRepository.save(company));
     }
+
+    @Override
+    public Page<CompanyResponse> getAllPageable(int pageNo, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Page<Company> page = companyRepository.findAll(pageable);
+        return page.map(companyMapper::convertToResponse);
+    }
+
+    @Override
+    public PageResponse<CompanyResponse> getAllPageableCustom(int pageNo, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Page<Company> page = companyRepository.findAll(pageable);
+        PageResponse<CompanyResponse> pageResponse = new PageResponse<>();
+        pageResponse.setContent(page.getContent().stream().map(companyMapper::convertToResponse).toList());
+        pageResponse.setPageNo(pageNo);
+        pageResponse.setPageSize(pageSize);
+        pageResponse.setTotalPages(page.getTotalPages());
+        pageResponse.setTotalElements(page.getNumberOfElements());
+        pageResponse.setLast(page.isLast());
+        return pageResponse;
+    }
+
 }
